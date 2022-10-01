@@ -1,0 +1,33 @@
+{
+    "workbench.colorTheme": "Default Dark+",
+    "workbench.colorCustomizations": {
+    "[Tokyo Night Storm]": {
+        "activityBar.foreground": "#9422d6",
+        "activityBar.inactiveForeground": "#a200ff62"
+    }
+        },
+
+    "editor.tokenColorCustomizations": {
+        "[Tokyo Night Storm]": {
+            "keywords": "#daff1f",
+            "numbers": "#ea00ff",
+            "variables": "#FF0000"
+
+        },
+},
+    "editor.semanticTokenColorCustomizations": {
+         "[Tokyo Night Storm]": {
+            "enabled": true,
+            "rules": {
+                "variable": "#ff0000",
+                "property": "#ff0000",
+                "field": "#ff0000",
+                "selfParameter": "#ff0000",
+                "local":"#ff0000",
+                "number": "#ff0000",
+                "enumMember": "#ff0000",
+                "string": "#ff0000",
+            }
+         }
+    },
+}
