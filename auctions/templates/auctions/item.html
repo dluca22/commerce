@@ -1,0 +1,67 @@
+{%extends "auctions/layout.html"%}
+
+{% block body%}
+{%if not error %}
+
+<table>
+    <tr>
+        <th>Title:</th>
+    </tr>
+    <td>
+        <h3 class="test-text">{{item.title}} watching = ({{total_wathing}})</h3>
+    </td>
+
+    <tr>
+        <th>Image</th>
+    </tr>
+    <td>
+        <img src="{{item.image}}" alt="immagine" height="150px" width="150px">
+    </td>
+    <tr>
+        <th>Description:</th>
+    </tr>
+    <td>
+        <p class="test-text">{{item.description}}</p>
+    </td>
+    <tr>
+        <th>Owner:</th>
+        <th>Category</th>
+        <th>Date Published</th>
+    </tr>
+    <tr>
+        <td>
+            <p class="test-text">{{item.owner}}</p>
+        </td>
+        <td>
+            <p class="test-text">{{item.category}}</p>
+        </td>
+        <td>
+            <p class="test-text">{{item.date}}</p>
+        </td>
+    </tr>
+
+
+</table>
+<h4>Bidding</h4>
+{%if user.is_authenticated%}
+    <a href="#"></a><button class="btn btn-danger">&lt;3</button>
+    <p style="color:blue">place your bid</p>
+{%else%}
+    <p style="color:blue"><u>you have to login/register to bid.</u></p>
+
+{%endif%}
+
+<h5><u>other things:</u></h5>
+
+<p><b>item id: </b><p class="test-text">{{item.id}}</p>
+{%if item.active%}
+    <p><em>Active</em></p>
+{%else%}
+    <p><em>Not active</em></p>
+{%endif%}
+{%else%}
+<h1>This item wasn't added yet</h1>
+{%endif%}
+
+
+{% endblock %}

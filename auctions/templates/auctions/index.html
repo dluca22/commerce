@@ -1,7 +1,37 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+<h2>Active Listings</h2>
 
-    TODO
-{% endblock %}
+<div class="row">
+{% for item in items_database%}
+    <div class="col-8 d-flex">
+
+        <div class="card" style="width: 12rem;">
+            <img src="{{item.image}}" class="card-img-top" alt="#TODO placeholder" height="80px">
+            <div class="card-body">
+                <h5 class="card-title"> <a href="{% url 'item' item.id %}">{{item.title}}</a></h5>
+                <p class="card-text">{{item.description}}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Start price = {{item.start_price}}</li>
+                <!-- <li class="list-group-item">Current Bid = {{bid}}</li> -->
+
+                <li class="list-group-item">O.P. {{item.owner}}</li>
+                <li class="list-group-item">Categ: {{item.category}}</li>
+            </ul>
+            <div class="card-body">
+                <a href="{% url 'item' item.id %}" class="card-link">Place Bid</a>
+                <!-- &lt; è escapechar per < (remember &lesserthan;) -->
+                <a href="#" class="card-link">Add to &lt;3 </a>
+            </div>
+        </div>
+    </div>
+
+
+    {% empty %}
+    <h2>There are no active listings at the moment</h2>
+    {% endfor %}
+</div>
+
+    {% endblock %}

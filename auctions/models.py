@@ -1,4 +1,6 @@
 from dataclasses import Field
+from email.policy import default
+from tkinter import CASCADE
 from unicodedata import category
 from unittest.util import _MAX_LENGTH
 from django.contrib.auth.models import AbstractUser
@@ -6,61 +8,67 @@ from django.db import models
 
 
 class User(AbstractUser):
-    # pass
+    pass
 
-class User(models.Model):
-    id = models.AutoField()
-    username = models.CharField(max_length=32)
-    email = models.EmailField()
-    password = models.password
-    userimage (if any)
-
-
-class Listing(models.Model):
-
-    id = models.BigAutoField(primary_key=True)
-    title = models.CharField(max_length=64)
-    price = models.FloatField()
-    image = models.URLField()
-    description = models.TextField(max_length=500)
-    date = models.DateField(auto_now_add=True)
-    owner = models.ForeignKey('User', on_delete=models.CASCADE)
-    category = models.ForeignKey('Category')
-    active = models.BooleanField()
+"""--------------"""
+class Category(models.Model):
+    name = models.CharField(max_length=32, null=True, default=None)
 
     def __str__(self):
-        return f"{self.id}: {self.title}. Price: {self.price}"
+        return self.name
+#     # listing_id= models.ForeignKey('Listing')
 
-
-
-# Listing():
-    #     id
-    #     title
-    #     price
-    #     image
-    #     description
-    #     date
-    #     owner F.K.
-    #     category F.K.
-    #     active (bool)
 """--------------"""
 
-class Category(models.Model):
+class Listing(models.Model):
     id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=32)
-    # listing_id= models.ForeignKey('Listing')
+    title = models.CharField(max_length=64)
+    start_price = models.FloatField()
+    # desired increments ?? (able like choose if 0.1$, or 1$ or 5$ increments)
+    image = models.URLField(null=True, blank=True)
+    description = models.TextField(max_length=500, null=True) #remove NULL?
+    date = models.DateTimeField(auto_now=True) # editable=False
+    active = models.BooleanField(default=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ManyToManyField(Category)
+
+    # final_buyer
+
+
+    def __str__(self):
+        return f"{self.id} - {self.title}. price: {self.start_price}"
+
 
 """--------------"""
 
-# Watchlist()
-#     listing_id
-#     user_id
+# Bidding table but also History price
+class Bids(models.Model):
+    listing_id = models.ManyToManyField(Listing)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    bid = models.FloatField()
+
 """--------------"""
-# Comments()
-#     listing_id
-#     user_id
-#     text
+
+class Watchlist(models.Model):
+    listing_id = models.ForeignKey(Listing, null=True, on_delete=models.SET_NULL)
+    user_id = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+#ORIG  class Watchlist(models.Model):
+#     listing_id = models.ManyToManyField(Listing)
+#     user_id = models.ManyToManyField(User)
+
 """--------------"""
-# forse
-    # History_price()
+class Comments(models.Model):
+    listing_id = models.ForeignKey(Listing, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    text = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f"{self.user_id}: {self.text}"
+
 """--------------"""
+
+
+# class User(AbstractUser): #circular dependencies
+#     watchlist = models.ManyToManyField(Listing, blank=True, related_name="watcher")
+#     pass

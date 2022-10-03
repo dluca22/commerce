@@ -12,9 +12,10 @@
             "keywords": "#daff1f",
             "numbers": "#ea00ff",
             "variables": "#FF0000"
-
         },
-},
+        "comments": "",
+        "textMateRules": []
+    },
     "editor.semanticTokenColorCustomizations": {
          "[Tokyo Night Storm]": {
             "enabled": true,

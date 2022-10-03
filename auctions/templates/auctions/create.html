@@ -1,0 +1,20 @@
+{%extends 'auctions/layout.html'%}
+
+{%block body%}
+    {%if user.is_authenticated%}
+    <p>form to create</p>
+
+    <form action="{%url 'create' %}" method="post">
+        {%csrf_token%}
+        {{form.as_div}}
+
+
+    <input type="submit" class="btn btn-primary" value="Submit">
+    </form>
+
+    <!-- user not authenticated HO SPOSTATO IL DECORATOR SU POST-->
+    {%else%}
+        <p>you dont have permission</p>
+        <button>Create an account</button>
+    {%endif%}
+{%endblock%}

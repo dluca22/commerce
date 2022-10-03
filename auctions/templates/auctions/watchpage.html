@@ -1,0 +1,37 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h2>Watching:</h2>
+
+<div class="row">
+{% for watched in watchlist%}
+    <div class="col-8 d-flex">
+
+        <div class="card" style="width: 12rem;">
+            <img src="{{watched.image}}" class="card-img-top" alt="#TODO placeholder" height="80px">
+            <div class="card-body">
+                <h5 class="card-title"> </h5>
+                <p class="card-text">{{watched.description}}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-watched">Start price = {{watched.start_price}}</li>
+                <!-- <li class="list-group-watched">Current Bid = {{bid}}</li> -->
+
+                <li class="list-group-watched">O.P. {{watched.owner}}</li>
+                <li class="list-group-watched">Categ: {{watched.category}}</li>
+            </ul>
+            <div class="card-body">
+                <p>Place Bid</p>
+                <!-- &lt; è escapechar per < (remember &lesserthan;) -->
+                <a href="#" class="card-link">Add to &lt;3 </a>
+            </div>
+        </div>
+    </div>
+
+
+    {% empty %}
+    <h2>There are no favourite listings at the moment</h2>
+    {% endfor %}
+</div>
+
+    {% endblock %}
