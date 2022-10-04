@@ -88,16 +88,19 @@ def create(request):
             # if valid, add owner to the model, then save
             submission.instance.owner = request.user
             submission.save()
-
             # can only get 'id' AFTER save() | <else> None
             listing_id = submission.instance.id
-            return HttpResponseRedirect(reverse())
+            # return render(request, "auctions/item.html", {'item': submission})
+
+            return HttpResponseRedirect(reverse("item", args=[listing_id]))
+
         else:
             print("no")
 
-        return HttpResponseRedirect("")
-    else:
 
+    else: # "GET"
+
+        # NOTES: funziona, sistemare design e cercare di mettere m2m to Category
         create_form = CreateListing()
         context = {'form': create_form}
         return render(request, "auctions/create.html", context)
@@ -106,31 +109,61 @@ def create(request):
 def item_page(request, id):
 
     if request.method == "POST":
-        # logic for delete from owner
+        # TODO logic for delete from owner
+        # TODO logic to bid on item from not owner
+
         pass
+
     else: #"GET"
     # render page
         try:
+            # ottienin l'id della pagina richiesta per caricare i dati
             item = Listing.objects.get(id=id)
-            total_watching = Watchlist.objects.filter(listing_id=id)
-            context = {'item':item, 'total_watching': len(total_watching)}
 
+            # queryset delle cose che un user sta guardando
+      #tmp      # user_watched = Listing.objects.filter(watchlist__user_id = request.user).values()
+      #tmp      # in_watchlist = [x['id'] for x in user_watched]
+
+            # print(f"user_watched {user_watched}")
+            # print(f"in_watchlist {in_watchlist}")
+
+            # lista = Watchlist.in_watched(user_id=request.user)
+
+            user_watching = Watchlist.user_watchlist(user_id=request.user)
+
+            # E QUI ERRORE
+            # counts number of occurrences of this listing_id in watchlist table
+            num_of_watching = Watchlist.people_watching(listing_id=item.id)
+            # num_of_watching = 3
+
+            context = {'item':item, 'total_watching': num_of_watching}
+            #--------------------
 
             return render(request, "auctions/item.html", context=context)
-        except:
+        except: # if no page
             return render(request, "auctions/item.html", {'error':"error"})
 
 
 def watchlist(request, id=None):
-    if request.method =="POST":
+    user_watched = Listing.objects.filter(watchlist__user_id = request.user)
+
+    if request.method =="POST": # when added to watchlist
+
         # list_id =
         # user = request.user
         pass
-    else:
-        user_watched = Watchlist.objects.filter(user_id = request.user)
+
+    else: #display the user watched items
+
+        # print("user_watched:")
+        # print(user_watched)
 
 
+        # print("listset:")
+        # print(listset)
         context = {"watchlist":user_watched}
+        # print("context:")
+        # print(context)
 
         return render(request, "auctions/watchpage.html", context=context)
 

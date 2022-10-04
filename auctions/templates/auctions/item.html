@@ -2,13 +2,13 @@
 
 {% block body%}
 {%if not error %}
-
+<p><b>watching =</b> ({{total_watching}})</p>
 <table>
     <tr>
         <th>Title:</th>
     </tr>
     <td>
-        <h3 class="test-text">{{item.title}} watching = ({{total_wathing}})</h3>
+        <h3 class="test-text">{{item.title}} </h3>
     </td>
 
     <tr>
@@ -44,9 +44,20 @@
 </table>
 <h4>Bidding</h4>
 {%if user.is_authenticated%}
-    <a href="#"></a><button class="btn btn-danger">&lt;3</button>
+<!-- add to watchlist -->
+<form action="{%url 'watchlist' %}" method="post">
+    {%csrf_token%}
+    <input type="submit" name="add_watch" id="watchlist-button" class="btn btn-danger", value="&lt;3">
+    <!-- <button name="add_watch" class="btn btn-danger">&lt;3</button> -->
+</form>
+
+
+<!-- place bid form -->
     <p style="color:blue">place your bid</p>
+
+    <!-- if not authenticated, insert reminder -->
 {%else%}
+
     <p style="color:blue"><u>you have to login/register to bid.</u></p>
 
 {%endif%}

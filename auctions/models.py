@@ -12,7 +12,7 @@ class User(AbstractUser):
 
 """--------------"""
 class Category(models.Model):
-    name = models.CharField(max_length=32, null=True, default=None)
+    name = models.CharField(max_length=32, null=True)
 
     def __str__(self):
         return self.name
@@ -25,14 +25,19 @@ class Listing(models.Model):
     title = models.CharField(max_length=64)
     start_price = models.FloatField()
     # desired increments ?? (able like choose if 0.1$, or 1$ or 5$ increments)
-    image = models.URLField(null=True, blank=True)
+    image = models.URLField(null=True, blank=True, default="https://static.vecteezy.com/system/resources/thumbnails/006/899/230/small/mystery-random-loot-box-from-game-icon-vector.jpg")
     description = models.TextField(max_length=500, null=True) #remove NULL?
     date = models.DateTimeField(auto_now=True) # editable=False
     active = models.BooleanField(default=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ManyToManyField(Category)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE) #MUst be se on [deleted user, but this is  FK and only expects an id Number]
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
 
     # final_buyer
+
+    @property
+    def is_in_category(self, active):
+        # 'calculation' return a boolean
+        return True if something else False
 
 
     def __str__(self):
@@ -51,7 +56,26 @@ class Bids(models.Model):
 
 class Watchlist(models.Model):
     listing_id = models.ForeignKey(Listing, null=True, on_delete=models.SET_NULL)
-    user_id = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user_id = models.ForeignKey(User, related_name="test", null=True, on_delete=models.SET_NULL)
+
+
+    def user_watchlist(user_id):
+
+        user_watched = Listing.objects.filter(watchlist__user_id = user_id).values()
+        in_watchlist = [x['id'] for x in user_watched]
+        return in_watchlist
+
+# ERRORE QUI
+    def people_watching(self, listing_id):
+        watchers = self.objects.filter(listing_id=id).count()
+        return watchers
+
+    def test_class():
+        return "helloworld"
+
+
+        # articles = Attribute.objects.filter(type="brand", value=value).values_list('article_id', flat=True)
+        return test_obj
 
 #ORIG  class Watchlist(models.Model):
 #     listing_id = models.ManyToManyField(Listing)

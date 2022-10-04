@@ -10,7 +10,7 @@
         <div class="card" style="width: 12rem;">
             <img src="{{watched.image}}" class="card-img-top" alt="#TODO placeholder" height="80px">
             <div class="card-body">
-                <h5 class="card-title"> </h5>
+                <h5 class="card-title"> <a href="{% url 'item' watched.id %}">{{watched.title}}</a></h5>
                 <p class="card-text">{{watched.description}}</p>
             </div>
             <ul class="list-group list-group-flush">

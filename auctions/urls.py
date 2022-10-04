@@ -10,4 +10,5 @@ urlpatterns = [
     path("create", views.create, name="create"),
     path("item/<int:id>", views.item_page, name="item"),
     path("watch", views.watchlist, name="watchlist"),
+    # path(r"watch/(?P<id>\w+)?", views.watchlist, name="watchlist"),
 ]
