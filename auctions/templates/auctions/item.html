@@ -2,7 +2,15 @@
 
 {% block body%}
 {%if not error %}
-
+    {%if in_watchlist %}
+        <p>already in your watchlist</p>
+    {%else%}
+        <!-- add to watchlist -->
+        <form action="{%url 'watchlist' %}" method="post">
+            {%csrf_token%}
+            <input type="submit" name="add_watch" id="watchlist-button" class="btn btn-danger", value="&lt;3">
+        </form>
+    {%endif%}
     {%if not people_watching %}
     <!-- might change this -->
         <p><b>watching =</b> (0)</p>
@@ -51,16 +59,7 @@
 <h4>Bidding</h4>
 {%if user.is_authenticated%}
 
-{%if item.id in usr_watchlist %}
-    <p>already in your watchlist</p>
-{%else%}
-<p>{{usr_watchlist}}</p>
-    <!-- add to watchlist -->
-    <form action="{%url 'watchlist' %}" method="post">
-        {%csrf_token%}
-        <input type="submit" name="add_watch" id="watchlist-button" class="btn btn-danger", value="&lt;3">
-    </form>
-{%endif%}
+
 
 <!-- place bid form -->
     <p style="color:blue">place your bid</p>

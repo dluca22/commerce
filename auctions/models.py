@@ -8,7 +8,13 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    
+    def is_watching(self, listing_id):
+        try:
+            self.watching.get(id=listing_id)
+            return True
+        except:
+            return False
 
 
 """--------------"""

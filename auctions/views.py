@@ -120,29 +120,18 @@ def item_page(request, id):
         try:
             # ottieni l'id della pagina richiesta per caricare i dati
             item = Listing.objects.get(id=id)
-
-            try:
-                usr_watchlist = get_user_watchlist(request.user.id)
-                watchlist_ids = get_user_watchlist(request.user.id, only_id=True)
-                print(watchlist_ids)
-
-            except:
-                print("error in user_watchlist() function")
+            user = User.objects.get(id=request.user.id)
 
 
             try:
-                n_ppl_watching = people_watching(item_id=item.id)
+                n_ppl_watching = people_watching(item.id)
             except:
                 print("error in people_watching()")
 
-            # try:
-            #     user = User.objects.get(request.user.id)
-            #     print(user.is_watching(self=user, listing_id=item.id))
-            # except:
-            #     print("doesn't work like that")
 
 
-            context = {'item':item, 'people_watching': n_ppl_watching, 'usr_watchlist': watchlist_ids}
+
+            context = {'item':item, 'people_watching': n_ppl_watching, 'in_watchlist': user.is_watching(item.id)}
 
             #--------------------
             return render(request, "auctions/item.html", context=context)
@@ -152,7 +141,7 @@ def item_page(request, id):
 
 
 def watchlist(request, id=None):
-    user_watched = user_watched
+
 
 
     if request.method =="POST": # when added to watchlist
@@ -162,12 +151,14 @@ def watchlist(request, id=None):
         pass
 
     else: #display the user watched items
+        # can be shortened without try/except
+        try:
+            user_watchlist = get_user_watchlist(request.user.id)
+        except:
+            print("error in user_watchlist() function")
 
-
-        context = {"watchlist":user_watched}
-
-
-        return render(request, "auctions/watchpage.html", context=context)
+        return render(request, "auctions/watchpage.html", {"watchlist":user_watchlist}
+        )
 
 
 # # NOTES FROM create()
@@ -189,11 +180,8 @@ def people_watching(item_id):
 
 # gets objects in user's watchlist
 # if as_list=True, only returns list of IDs
-def get_user_watchlist(us_id, only_id=False):
+def get_user_watchlist(us_id):
         user_watched = Listing.objects.filter(watchers__user_id = us_id)
-        if only_id:
-            watchlist_ids = [q.id for q in user_watched]
-            return watchlist_ids
         return user_watched
 
 # OLD
