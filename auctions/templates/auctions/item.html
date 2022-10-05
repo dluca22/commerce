@@ -1,86 +1,94 @@
 {%extends "auctions/layout.html"%}
 
 {% block body%}
+
 {%if not error %}
-    {%if in_watchlist %}
-        <p>already in your watchlist</p>
-    {%else%}
-        <!-- add to watchlist -->
-        <form action="{%url 'watchlist' %}" method="post">
-            {%csrf_token%}
-            <input type="submit" name="add_watch" id="watchlist-button" class="btn btn-danger", value="&lt;3">
-        </form>
-    {%endif%}
+
+    <!-- add to watchlist -->
+    <form action="{%url 'watch_toggle' item.id %}" method="post">
+        {%csrf_token%}
+        {%if is_watching == False %}
+                <!-- <input type="submit" name="remove_watch" id="watchlist-button" class="btn btn-warning" , value="&lt;/3"> -->
+                <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-danger" , value="follow">cuore</button>
+
+
+        {%elif is_watchign == True%}
+
+            <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-warning" , value="unfollow">un_cuore</button>
+                <!-- <input type="submit" name="add_watch" id="watchlist-button" class="btn btn-danger" , value="&lt;3"> -->
+        {%endif%}
+    </form>
     {%if not people_watching %}
     <!-- might change this -->
         <p><b>watching =</b> (0)</p>
     {%else%}
         <p><b>watching =</b> ({{people_watching}})</p>
     {%endif%}
-<table>
-    <tr>
-        <th>Title:</th>
-    </tr>
-    <td>
-        <h3 class="test-text">{{item.title}} </h3>
-    </td>
-
-    <tr>
-        <th>Image</th>
-    </tr>
-    <td>
-        <img src="{{item.image}}" alt="immagine" height="150px" width="150px">
-    </td>
-    <tr>
-        <th>Description:</th>
-    </tr>
-    <td>
-        <p class="test-text">{{item.description}}</p>
-    </td>
-    <tr>
-        <th>Owner:</th>
-        <th>Category</th>
-        <th>Date Published</th>
-    </tr>
-    <tr>
+    <table>
+        <tr>
+            <th>Title:</th>
+        </tr>
         <td>
-            <p class="test-text">{{item.owner}}</p>
+            <h3 class="test-text">{{item.title}} </h3>
         </td>
+
+        <tr>
+            <th>Image</th>
+        </tr>
         <td>
-            <p class="test-text">{{item.category}}</p>
+            <img src="{{item.image}}" alt="immagine" height="150px" width="150px">
         </td>
+        <tr>
+            <th>Description:</th>
+        </tr>
         <td>
-            <p class="test-text">{{item.date}}</p>
+            <p class="test-text">{{item.description}}</p>
         </td>
-    </tr>
+        <tr>
+            <th>Owner:</th>
+            <th>Category</th>
+            <th>Date Published</th>
+        </tr>
+        <tr>
+            <td>
+                <p class="test-text">{{item.owner}}</p>
+            </td>
+            <td>
+                <p class="test-text">{{item.category}}</p>
+            </td>
+            <td>
+                <p class="test-text">{{item.date}}</p>
+            </td>
+        </tr>
 
 
-</table>
-<h4>Bidding</h4>
-{%if user.is_authenticated%}
+    </table>
+    <h4>Bidding</h4>
+    {%if user.is_authenticated%}
+        <!-- place bid form -->
+        <p style="color:blue">place your bid</p>
 
+        <!-- if not authenticated, insert reminder -->
+    {%else%}
 
+        <p style="color:blue"><u>you have to login/register to bid.</u></p>
 
-<!-- place bid form -->
-    <p style="color:blue">place your bid</p>
+    {%endif%}
 
-    <!-- if not authenticated, insert reminder -->
-{%else%}
+    <h5><u>other things:</u></h5>
 
-    <p style="color:blue"><u>you have to login/register to bid.</u></p>
+    <p><b>item id: </b>
+    <p class="test-text">{{item.id}}</p>
 
-{%endif%}
+    {%if item.active%}
+        <p><em>Active</em></p>
+    {%else%}
+        <p><em>Not active</em></p>
+    {%endif%}
 
-<h5><u>other things:</u></h5>
+{%elif error%}
+    <h1>This item wasn't added yet</h1>
 
-<p><b>item id: </b><p class="test-text">{{item.id}}</p>
-{%if item.active%}
-    <p><em>Active</em></p>
-{%else%}
-    <p><em>Not active</em></p>
-{%endif%}
-{%else%}
-<h1>This item wasn't added yet</h1>
 {%endif%}
 
 

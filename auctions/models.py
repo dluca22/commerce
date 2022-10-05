@@ -8,9 +8,10 @@ from django.db import models
 
 
 class User(AbstractUser):
-    
+
     def is_watching(self, listing_id):
         try:
+            # errore qui
             self.watching.get(id=listing_id)
             return True
         except:
@@ -40,8 +41,11 @@ class Listing(models.Model):
     active = models.BooleanField(default=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE) #MUst be se on [deleted user, but this is  FK and only expects an id Number]
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    # final_buyer ?
 
-    # final_buyer
+    @property
+    def is_active(self):
+        return self.active
 
     """# this is a method of an existing listing where i already have a
     l1 = Listing.objects.get(id=1) OBJECT selected in a var
@@ -49,6 +53,7 @@ class Listing(models.Model):
     def close_auction(self):
         self.active= False
         return("closed")
+
 
 
     def __str__(self):
@@ -68,7 +73,6 @@ class Bids(models.Model):
 class Watchlist(models.Model):
     listing_id = models.ForeignKey(Listing, related_name="watchers", null=True, on_delete=models.SET_NULL)
     user_id = models.ForeignKey(User, related_name="watching", null=True, on_delete=models.SET_NULL)
-
 
 
     def test_class(self):
