@@ -80,21 +80,22 @@ def register(request):
 @login_required
 def create(request):
 
+    # submit form
     if request.method == "POST":
-        # submit form
+
         # crea dictionary submission
         submission = CreateListing(request.POST)
+
+        # if valid, add owner to the model, then save
         if submission.is_valid():
-            # if valid, add owner to the model, then save
             submission.instance.owner = request.user
             submission.save()
-            # can only get 'id' AFTER save() | <else> None
-            listing_id = submission.instance.id
-            # return render(request, "auctions/item.html", {'item': submission})
 
+            listing_id = submission.instance.id # can only get 'id' AFTER save(), else: None
             return HttpResponseRedirect(reverse("item", args=[listing_id]))
 
         else:
+            # maybe redirect with another error
             print("no")
 
 
@@ -117,35 +118,42 @@ def item_page(request, id):
     else: #"GET"
     # render page
         try:
-            # ottienin l'id della pagina richiesta per caricare i dati
+            # ottieni l'id della pagina richiesta per caricare i dati
             item = Listing.objects.get(id=id)
 
-            # queryset delle cose che un user sta guardando
-      #tmp      # user_watched = Listing.objects.filter(watchlist__user_id = request.user).values()
-      #tmp      # in_watchlist = [x['id'] for x in user_watched]
+            try:
+                usr_watchlist = get_user_watchlist(request.user.id)
+                watchlist_ids = get_user_watchlist(request.user.id, only_id=True)
+                print(watchlist_ids)
 
-            # print(f"user_watched {user_watched}")
-            # print(f"in_watchlist {in_watchlist}")
+            except:
+                print("error in user_watchlist() function")
 
-            # lista = Watchlist.in_watched(user_id=request.user)
 
-            user_watching = Watchlist.user_watchlist(user_id=request.user)
+            try:
+                n_ppl_watching = people_watching(item_id=item.id)
+            except:
+                print("error in people_watching()")
 
-            # E QUI ERRORE
-            # counts number of occurrences of this listing_id in watchlist table
-            num_of_watching = Watchlist.people_watching(listing_id=item.id)
-            # num_of_watching = 3
+            # try:
+            #     user = User.objects.get(request.user.id)
+            #     print(user.is_watching(self=user, listing_id=item.id))
+            # except:
+            #     print("doesn't work like that")
 
-            context = {'item':item, 'total_watching': num_of_watching}
+
+            context = {'item':item, 'people_watching': n_ppl_watching, 'usr_watchlist': watchlist_ids}
+
             #--------------------
-
             return render(request, "auctions/item.html", context=context)
+
         except: # if no page
             return render(request, "auctions/item.html", {'error':"error"})
 
 
 def watchlist(request, id=None):
-    user_watched = Listing.objects.filter(watchlist__user_id = request.user)
+    user_watched = user_watched
+
 
     if request.method =="POST": # when added to watchlist
 
@@ -155,19 +163,11 @@ def watchlist(request, id=None):
 
     else: #display the user watched items
 
-        # print("user_watched:")
-        # print(user_watched)
 
-
-        # print("listset:")
-        # print(listset)
         context = {"watchlist":user_watched}
-        # print("context:")
-        # print(context)
+
 
         return render(request, "auctions/watchpage.html", context=context)
-
-
 
 
 # # NOTES FROM create()
@@ -178,3 +178,27 @@ def watchlist(request, id=None):
         #            """ 2 different ways of accessing data"""
         #           print(submission.data["title"])
         #           print(submission.instance.title)
+
+
+# ======== functions ===============
+
+# counts number of occurrences of this listing_id in watchlist table
+def people_watching(item_id):
+        watchers = Watchlist.objects.filter(listing_id=item_id).count()
+        return watchers
+
+# gets objects in user's watchlist
+# if as_list=True, only returns list of IDs
+def get_user_watchlist(us_id, only_id=False):
+        user_watched = Listing.objects.filter(watchers__user_id = us_id)
+        if only_id:
+            watchlist_ids = [q.id for q in user_watched]
+            return watchlist_ids
+        return user_watched
+
+# OLD
+# def user_watchlist(user_id):
+#         user = User.objects.get(id=user_id)
+#         queryset = user.watching.all()
+#         in_watchlist = [q.id for q in queryset]
+#         return in_watchlist

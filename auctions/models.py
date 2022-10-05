@@ -10,12 +10,15 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+
 """--------------"""
 class Category(models.Model):
     name = models.CharField(max_length=32, null=True)
 
     def __str__(self):
         return self.name
+
+
 #     # listing_id= models.ForeignKey('Listing')
 
 """--------------"""
@@ -34,10 +37,12 @@ class Listing(models.Model):
 
     # final_buyer
 
-    @property
-    def is_in_category(self, active):
-        # 'calculation' return a boolean
-        return True if something else False
+    """# this is a method of an existing listing where i already have a
+    l1 = Listing.objects.get(id=1) OBJECT selected in a var
+    so that now i can call l1.close_auction() and its own method sets it to False"""
+    def close_auction(self):
+        self.active= False
+        return("closed")
 
 
     def __str__(self):
@@ -55,23 +60,13 @@ class Bids(models.Model):
 """--------------"""
 
 class Watchlist(models.Model):
-    listing_id = models.ForeignKey(Listing, null=True, on_delete=models.SET_NULL)
-    user_id = models.ForeignKey(User, related_name="test", null=True, on_delete=models.SET_NULL)
+    listing_id = models.ForeignKey(Listing, related_name="watchers", null=True, on_delete=models.SET_NULL)
+    user_id = models.ForeignKey(User, related_name="watching", null=True, on_delete=models.SET_NULL)
 
 
-    def user_watchlist(user_id):
 
-        user_watched = Listing.objects.filter(watchlist__user_id = user_id).values()
-        in_watchlist = [x['id'] for x in user_watched]
-        return in_watchlist
-
-# ERRORE QUI
-    def people_watching(self, listing_id):
-        watchers = self.objects.filter(listing_id=id).count()
-        return watchers
-
-    def test_class():
-        return "helloworld"
+    def test_class(self):
+        return
 
 
         # articles = Attribute.objects.filter(type="brand", value=value).values_list('article_id', flat=True)
