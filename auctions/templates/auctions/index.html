@@ -4,6 +4,7 @@
 <h2>Active Listings</h2>
 
 <div class="row">
+    <!-- if items, display cards -->
 {% for item in items_database%}
     <div class="col-8 d-flex">
 
@@ -21,14 +22,21 @@
                 <li class="list-group-item">Categ: {{item.category}}</li>
             </ul>
             <div class="card-body">
+                <!-- place bid button link to item page -->
                 <a href="{% url 'item' item.id %}" class="card-link">Place Bid</a>
-                <!-- &lt; è escapechar per < (remember &lesserthan;) -->
-                <a href="#" class="card-link">Add to &lt;3 </a>
+
+                <!-- add to watchlist form -->
+                <form action="{%url 'watch_toggle' item.id %}" method="post">
+                    {%csrf_token%}
+                    <!-- &lt; è escapechar per < (remember &lesserthan;) -->
+                    <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-danger" , value="follow">&lt;3</button>
+
+                </form>
             </div>
         </div>
     </div>
 
-
+    <!-- if no items -->
     {% empty %}
     <h2>There are no active listings at the moment</h2>
     {% endfor %}

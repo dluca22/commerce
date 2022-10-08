@@ -10,6 +10,9 @@ urlpatterns = [
     path("create", views.create, name="create"),
     path("item/<int:id>", views.item_page, name="item"),
     path("watchlist", views.watchlist, name="watchlist"),
-    path("watch<int:id>", views.watch_toggle, name="watch_toggle"),
+    path("watch <int:li_id>", views.watch_toggle, name="watch_toggle"),
+    path("close <int:li_id>", views.close_auct, name="close"),
+    path("bid/<int:li_id>", views.bid, name="bid"),
+
     # path(r"watch/(?P<id>\w+)?", views.watchlist, name="watchlist"),
 ]

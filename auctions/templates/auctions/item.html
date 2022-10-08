@@ -4,26 +4,32 @@
 
 {%if not error %}
 
-    <!-- add to watchlist -->
+    <!-- add to watchlist form -->
     <form action="{%url 'watch_toggle' item.id %}" method="post">
         {%csrf_token%}
+        <!-- if usr is NOT watching listing, display button follow -->
         {%if is_watching == False %}
-                <!-- <input type="submit" name="remove_watch" id="watchlist-button" class="btn btn-warning" , value="&lt;/3"> -->
-                <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-danger" , value="follow">cuore</button>
+
+        <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-danger" , value="follow">&lt;3</button>
 
 
-        {%elif is_watchign == True%}
+        <!-- if usr is watching listing, display button unfollow. -->
+        {%elif is_watching == True%}
 
-            <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-warning" , value="unfollow">un_cuore</button>
-                <!-- <input type="submit" name="add_watch" id="watchlist-button" class="btn btn-danger" , value="&lt;3"> -->
+            <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-warning" , value="unfollow">&lt;/3</button>
         {%endif%}
-    </form>
+        </form>
+
+    <!-- people watching counter -->
     {%if not people_watching %}
     <!-- might change this -->
-        <p><b>watching =</b> (0)</p>
+        <p><b>People watching =</b> (0)</p>
     {%else%}
-        <p><b>watching =</b> ({{people_watching}})</p>
+        <p><b>People watching =</b> ({{people_watching}})</p>
     {%endif%}
+
+
+        <!-- listing table -->
     <table>
         <tr>
             <th>Title:</th>
@@ -63,28 +69,60 @@
 
 
     </table>
+    <!-- bid section -->
     <h4>Bidding</h4>
     {%if user.is_authenticated%}
         <!-- place bid form -->
-        <p style="color:blue">place your bid</p>
+        <p class="test-msg">place your bid</p>
 
         <!-- if not authenticated, insert reminder -->
     {%else%}
-
-        <p style="color:blue"><u>you have to login/register to bid.</u></p>
-
+        <p class="test-msg"><u>you have to login/register to bid.</u></p>
     {%endif%}
 
     <h5><u>other things:</u></h5>
 
-    <p><b>item id: </b>
-    <p class="test-text">{{item.id}}</p>
+    <p><b>item id: </b> <span class="test-text">{{item.id}}</span>
 
     {%if item.active%}
         <p><em>Active</em></p>
+
+        <!-- if user is owner, show Close Auct form -->
+        {%if item.owner == user%}
+
+            <div class="d-flex inline-block">
+                <p class="mx-5"><em>IS OWNER</em></p>
+
+                <form action="{%url 'close' item.id %}" method="post">
+                    {%csrf_token%}
+
+                    <button type="submit" class="btn btn-info" value="">Close Auction</button>
+                </form>
+            </div>
+        {%else%}
+        <div class="d-flex inline-block">
+            <p class="mx-5"><em>NOT OWNER</em></p>
+            <form action="{%url 'bid' item.id %}"method="post">
+                {%csrf_token%}
+
+                {{bid_form.bid}}
+                <button class="btn btn-success" name="place_bid">Bid</button>
+            </form>
+
+        </div>
+        {%endif%}
+
     {%else%}
-        <p><em>Not active</em></p>
-    {%endif%}
+    {%if item.owner == user%}
+            <p>auction is closed, user <b>BUYER</b> bought it.</p>
+        {%else%}
+        <div class="d-flex inline-block">
+            <p class="mx-5"><em>NOT OWNER BUT ITEM CLOSED</em></p>
+
+
+        </div>
+        {%endif%}
+{%endif%}
 
 {%elif error%}
     <h1>This item wasn't added yet</h1>

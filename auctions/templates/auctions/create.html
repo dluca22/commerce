@@ -6,7 +6,7 @@
 
     <form action="{%url 'create' %}" method="post">
         {%csrf_token%}
-        {{form.as_div}}
+        {{create_form.as_div}}
 
 
     <input type="submit" class="btn btn-primary" value="Submit">
