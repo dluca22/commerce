@@ -11,10 +11,10 @@
             <img src="{{watched.image}}" class="card-img-top" alt="#TODO placeholder" height="80px">
             <div class="card-body">
                 <h5 class="card-title"> <a href="{% url 'item' watched.id %}">{{watched.title}}</a></h5>
-                <p class="card-text">{{watched.description}}</p>
+                <p class="card-text">{{watched.descr_snippet}}</p>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-watched">Start price = {{watched.start_price}}</li>
+                <li class="list-group-watched">Price = {{watched.current_bid}}</li>
                 <!-- <li class="list-group-watched">Current Bid = {{bid}}</li> -->
 
                 <li class="list-group-watched">O.P. {{watched.owner}}</li>

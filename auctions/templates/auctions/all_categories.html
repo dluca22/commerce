@@ -25,7 +25,7 @@
 
 
     <!-- IF there are active items IN THIS CATEGORY -->
-    {%if category.active_in_category %}
+
     <!-- FOR every item belonging in that category -->
             {% for item in items_in_cat %}
 
@@ -36,7 +36,7 @@
                     <p class="card-text">{{item.descr_snippet}}</p>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Start price = {{item.current_bid}}</li>
+                    <li class="list-group-item">Price = {{item.current_bid}}</li>
                     <!-- <li class="list-group-item">Current Bid = {{bid}}</li> -->
 
                     <li class="list-group-item">O.P. {{item.owner}}</li>
@@ -56,15 +56,12 @@
                 </div>
             </div>
             {%empty%}
-            <p>questooo</p>
+            <h2>There is no active listing in this category</h2>
             <!-- ENDFOR Items to show -->
             {% endfor %}
 
             <!-- ELSE there are NO active items in this category -->
-        {%else%}
-            <h2>There are no active listings in this category at the moment</h2>
-        <!-- ENDIF there are active items in this category -->
-        {%endif%}
+
 
     <!-- ENDIF called via "display"/"selected" context -->
 
