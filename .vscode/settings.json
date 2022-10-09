@@ -31,4 +31,5 @@
             }
          }
     },
+    "editor.guides.indentation": true,
 }

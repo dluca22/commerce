@@ -21,6 +21,12 @@ class PlaceBid(ModelForm):
     class Meta:
         model = Bids
         fields = ('bid',)
+# ============= comment form =============
+
+class AddComment(ModelForm):
+    class Meta:
+        model = Comments
+        fields = ('text',)
 
 # ============= index page =============
 def index(request):
@@ -114,43 +120,45 @@ def create(request):
 # ============= item page =============
 
 def item_page(request, id):
-
-    if request.method == "POST":
-        # TODO logic for delete from owner
-        # TODO logic to bid on item from not owner
-
-        pass
-
-    else: #"GET"
-    # render page
-
-        u=request.user.id
-
-        # non funziona piu item page per user not authenticated
-
-        print(request.user == "AnonymousUser")
+    try:
+        # ottieni l'id della pagina richiesta per caricare i dati
+        item = Listing.objects.get(id=id)
+        bid_form= PlaceBid()
+        comment_form = AddComment()
 
         try:
-            # ottieni l'id della pagina richiesta per caricare i dati
-            item = Listing.objects.get(id=id)
-            bid_form= PlaceBid()
-            try:
-                n_ppl_watching = people_watching(item.id)
-            except:
-                print("error in people_watching()")
+            usr = request.user
+            is_watching = usr.is_watching(item.id)
+        except:
+            print("error in usr.is_watching()")
 
-            try:
-                usr = request.user
-                is_watching = usr.is_watching(item.id)
-            except:
-                print("error in usr.is_watching()")
+        context = {'item':item, 'is_watching': is_watching, 'bid_form': bid_form,'comment_form': comment_form}
 
-            context = {'item':item, 'people_watching': n_ppl_watching, 'is_watching': is_watching, 'bid_form': bid_form}
+        return render(request, "auctions/item.html", context=context)
 
-            return render(request, "auctions/item.html", context=context)
+    except: # if no page
+        error = "this fucking thing"
 
-        except: # if no page
-            return render(request, "auctions/item.html", {'error':"error"})
+        return render(request, "auctions/item.html", {'error':error})
+
+# ============= all categories page =============
+def categories(request):
+    all_categories = Category.objects.all()
+
+    return render(request, "auctions/all_categories.html", {'display_all': True, 'all_categories':all_categories})
+
+# ============= selected categories page =============
+def in_category(request, categ_name):
+
+    try:
+        category = Category.objects.get(name = categ_name)
+        items_in_cat = category.active_in_category
+    except:
+        wrong = categ_name.capitalize()
+        return render(request, "auctions/all_categories.html", {'error': wrong})
+
+    return render(request, "auctions/all_categories.html", {'category':category, 'show_in_this_category': True, 'items_in_cat': items_in_cat})
+
 
 # ============= watchlist page =============
 
@@ -205,33 +213,38 @@ def bid(request, li_id):
             bid = form.instance.bid
             listing = Listing.objects.get(id=li_id)
 
+            curret_price = listing.current_bid()
 
-            # error check if bid > 0 (or via model class)
-
-            # highest = listing.highest_bidder().bid
-            highest = listing.highest_bidder()
-            print(f"highest as num {highest}")
-            # if there is no bid registered for the auction se to start_price
-            if highest == None:
-                highest = Listing.start_price
-
-            if bid <= highest:
+            if bid <= curret_price:
+                # TODO
                 error = "Your bid must be higher"
-            if bid > highest:
+            if bid > curret_price:
                 place_bid = Bids(listing=listing, user=request.user, bid=bid)
                 place_bid.save()
-        # ele: bid not valid -> error message
+
     return HttpResponseRedirect(reverse("item", args=[li_id]))
 
 
-
 # ============= close auction =============
+# calls close_auct property, then saves
 def close_auct(request, li_id):
     if request.method == "POST":
-        winner = li_id.highest_bidder()
-        print("non è chiusa questa FUNC")
-        print(winner)
-        pass
+        listing = Listing.objects.get(id=li_id)
+        listing.close_auction
+        listing.save()
+        return HttpResponseRedirect(reverse("item", args=[li_id]))
+
+# ============= add comment =============
+# gets comment body from post form, saves entry to db, redirects to item page
+def add_comment(request, li_id):
+    if request.method == "POST":
+        commentform = AddComment(request.POST)
+        if commentform.is_valid():
+            body = commentform.instance.text
+            listing = Listing.objects.get(id=li_id)
+            add_comment = Comments(listing=listing, user=request.user, text=body)
+            add_comment.save()
+        return HttpResponseRedirect(reverse("item", args=[li_id]))
 
 
 # =================================
@@ -260,27 +273,6 @@ def get_user_watchlist(us_id):
         user_watched = Listing.objects.filter(watchers__user_id = us_id)
 
         return user_watched #return QuerySet
-
-# =====================================================
-# DISCARDED because they return Querysets of Watchlist objects
-# def DISCARDEDget_user_watchlist(user):
-#         user_watched = user.watching.filter(user_id = user)
-#         return user_watched #return QuerySet
-
-# # #same
-# def DISCARDED2get_user_watchlist(us):
-#     user_watched = Watchlist.objects.filter(user_id = us)
-#     return user_watched.values() #return QuerySet
-# =====================================================
-
-
-# OLD
-# def user_watchlist(user_id):
-#         user = User.objects.get(id=user_id)
-#         queryset = user.watching.all()
-#         in_watchlist = [q.id for q in queryset]
-#         return in_watchlist
-
 
 # notes from watch_toggle
 """ mettere server-side checking in caso di trickery su HTML

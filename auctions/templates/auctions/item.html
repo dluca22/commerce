@@ -1,32 +1,31 @@
 {%extends "auctions/layout.html"%}
 
 {% block body%}
-
+<!-- IF there is an error in the page -->
 {%if not error %}
 
-    <!-- add to watchlist form -->
-    <form action="{%url 'watch_toggle' item.id %}" method="post">
-        {%csrf_token%}
-        <!-- if usr is NOT watching listing, display button follow -->
-        {%if is_watching == False %}
+    <!-- IF user is authenticated > add to watchlist form -->
+    {%if user.is_authenticated %}
+                        <form action="{%url 'watch_toggle' item.id %}" method="post">
+                        {%csrf_token%}
 
-        <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-danger" , value="follow">&lt;3</button>
+                            <!-- IF usr is NOT watching listing, display button follow -->
+                            {%if is_watching == False %}
+                                                <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-danger" , value="follow">&lt;3</button>
 
+                                <!-- ELIF usr is watching listing, display button unfollow. -->
+                            {%elif is_watching == True%}
+                                                <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-warning" , value="unfollow">&lt;/3</button>
+                            <!-- ENDIF is watching -->
+                            {%endif%}
+                        </form>
 
-        <!-- if usr is watching listing, display button unfollow. -->
-        {%elif is_watching == True%}
+    <!-- ENDIF user authenticated -->
+    {%endif%}
 
-            <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-warning" , value="unfollow">&lt;/3</button>
-        {%endif%}
-        </form>
 
     <!-- people watching counter -->
-    {%if not people_watching %}
-    <!-- might change this -->
-        <p><b>People watching =</b> (0)</p>
-    {%else%}
-        <p><b>People watching =</b> ({{people_watching}})</p>
-    {%endif%}
+    <p><u>People watching =</u> ( <b>{{item.num_watching}}</b> )</p>
 
 
         <!-- listing table -->
@@ -60,7 +59,7 @@
                 <p class="test-text">{{item.owner}}</p>
             </td>
             <td>
-                <p class="test-text">{{item.category}}</p>
+                <p class="test-text"><a href="{%url 'category' item.category%}">{{item.category}}</a></p>
             </td>
             <td>
                 <p class="test-text">{{item.date}}</p>
@@ -69,64 +68,116 @@
 
 
     </table>
-    <!-- bid section -->
+
+    <h5><u>Price</u></h5>
+    <p><b></b> <span class="test-text">{{item.current_bid}}</span>
+
+        <!-- bid section -->
     <h4>Bidding</h4>
-    {%if user.is_authenticated%}
-        <!-- place bid form -->
-        <p class="test-msg">place your bid</p>
-
-        <!-- if not authenticated, insert reminder -->
-    {%else%}
-        <p class="test-msg"><u>you have to login/register to bid.</u></p>
-    {%endif%}
-
-    <h5><u>other things:</u></h5>
-
-    <p><b>item id: </b> <span class="test-text">{{item.id}}</span>
-
-    {%if item.active%}
-        <p><em>Active</em></p>
-
-        <!-- if user is owner, show Close Auct form -->
-        {%if item.owner == user%}
-
-            <div class="d-flex inline-block">
-                <p class="mx-5"><em>IS OWNER</em></p>
-
-                <form action="{%url 'close' item.id %}" method="post">
-                    {%csrf_token%}
-
-                    <button type="submit" class="btn btn-info" value="">Close Auction</button>
-                </form>
-            </div>
-        {%else%}
-        <div class="d-flex inline-block">
-            <p class="mx-5"><em>NOT OWNER</em></p>
-            <form action="{%url 'bid' item.id %}"method="post">
-                {%csrf_token%}
-
-                {{bid_form.bid}}
-                <button class="btn btn-success" name="place_bid">Bid</button>
-            </form>
-
-        </div>
-        {%endif%}
-
-    {%else%}
-    {%if item.owner == user%}
-            <p>auction is closed, user <b>BUYER</b> bought it.</p>
-        {%else%}
-        <div class="d-flex inline-block">
-            <p class="mx-5"><em>NOT OWNER BUT ITEM CLOSED</em></p>
+                    <!-- IF user authenticated bid form -->
+                    {%if user.is_authenticated%}
 
 
-        </div>
-        {%endif%}
-{%endif%}
+                        <!-- IF item is active -->
+                                        {%if item.active%}
+                                                                    <p><em>Active</em></p>
 
+                                                                    <!-- IF user is owner, can't bid, only close -->
+                                                                    {%if item.owner == user%}
+                                                                        <p class="mx-5"><em>IS OWNER</em></p>
+                                                                        <div class="d-flex inline-block">
+                                                                            <form action="{%url 'close' item.id %}" method="post">
+                                                                                {%csrf_token%}
+                                                                                <button type="submit" class="btn btn-info" name="close_auction">Close Auction</button>
+                                                                            </form>
+                                                                        </div>
+                                                                    <!-- ELIF user is not owner, place bid -->
+                                                                    {%else%}
+                                                                        <p class="mx-5"><em>NOT OWNER</em></p>
+                                                                        <div class="d-flex inline-block">
+                                                                            <form action="{%url 'bid' item.id %}"method="post">
+                                                                                {%csrf_token%}
+
+                                                                                {{bid_form.bid}}
+                                                                                <button class="btn btn-success" name="place_bid">Bid</button>
+                                                                            </form>
+                                                                        </div>
+                                                                        <!-- ENDIF bid/close auction -->
+                                                                    {%endif%}
+
+                                        <!-- ELSE item is not active -->
+                                        {%else%}
+                                                <!-- IF user IS owner, owner can see the user who bought it -->
+                                                                    {%if item.owner == user%}
+                                                                                        {%if item.owner == user and item.highest_bidder.user == owner%}
+                                                                                            <p>no one bought it</p>
+                                                                                        {%else%}
+                                                                                            <p>auction is closed, user <b>{{item.highest_bidder.user}}</b> bought it.</p>
+                                                                                        {%endif%}
+
+                                                                    <!-- ELIF user is not owner -->
+                                                                    {%else%}
+                                                                                        <div class="d-flex inline-block">
+                                                                        <!-- IF not owner highest bidder -->
+                                                                                    {%if item.highest_bidder.user == user%}
+
+                                                                                                    <p class="mx-5"><em>You won the auction</em></p>
+
+                                                                                    <!-- ELIF not owner NOT highest bidder -->
+
+                                                                                    {%else%}
+                                                                                                        <p class="mx-5"><em>You didn't win the auction</em></p>
+                                                                                    <!-- ENDIF not owner highest bidder -->
+                                                                                    {%endif%}
+                                                                                    </div>
+                                                                    <!-- ENDIF user owner/not owner -->
+                                                                    {%endif%}
+                                        <!-- ENDIF item is active/not active -->
+                                        {%endif%}
+
+                    <!-- ELSE user is not authenticated to bid -->
+                    {%else%}
+                        <p class="test-msg"><u>you have to login/register to bid.</u></p>
+                    <!-- ENDIF user is not authenticated to bid -->
+                    {%endif%}
+
+<!-- end bid section -->
+                    <!-- === comment section === -->
+                    <!-- display of messages -->
+                        <table>
+                            <tr>
+                                <th><u>user</u></th>
+                                <th><u>comment</u></th>
+                            </tr>
+
+                            {%for comm  in item.comments%}
+                            <tr>
+                                <td>{{comm.user.username}}</td>
+                                <td>{{comm.text}}</td>
+                            </tr>
+                            {%empty%}
+                            <p style="color:orange"><em><i>There are no comments here</i></em></p>
+                            {%endfor%}
+                        </table>
+                    <!-- IF authenticated reply form -->
+                    {%if user.is_authenticated%}
+                    <p><u><i>text submit form</i></u></p>
+                    <form action="{%url 'comment' item.id%}" method="post">
+                        {%csrf_token%}
+                        {{comment_form}}
+                        <button class="btn btn-dark" name="send_comment">Add Comment</button>
+
+
+                    </form>
+                    <!-- ELSE not authenticated, no reply -->
+                    {%endif%}
+                    <!-- === END comment section === -->
+<!-- ELIF there is an error in the page -->
 {%elif error%}
     <h1>This item wasn't added yet</h1>
+    <h2>{{error}}</h2>
 
+<!-- ENDIF error in the page -->
 {%endif%}
 
 
