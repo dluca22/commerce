@@ -38,13 +38,12 @@ class Listing(models.Model):
     id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=64)
     start_price = models.FloatField()
-    # desired increments ?? (able like choose if 0.1$, or 1$ or 5$ increments)
     image = models.URLField(null=True, blank=True, default="https://static.vecteezy.com/system/resources/thumbnails/006/899/230/small/mystery-random-loot-box-from-game-icon-vector.jpg")
     description = models.TextField(max_length=500, null=True) #remove NULL?
     date = models.DateTimeField(auto_now=True) # editable=False
     active = models.BooleanField(default=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="categorized")
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name="categorized")
     # final_buyer = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):

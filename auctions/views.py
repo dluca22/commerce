@@ -6,7 +6,8 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.forms import ModelForm, modelformset_factory
 from .models import *
-from django import forms
+from django.contrib import messages
+
 
 # =============form model=============
 class CreateListing(ModelForm):
@@ -28,6 +29,9 @@ class AddComment(ModelForm):
         model = Comments
         fields = ('text',)
 
+# ============= index page =============
+def blank(request):
+    return render(request, 'auctions/blank.html')
 # ============= index page =============
 def index(request):
     items_database = Listing.objects.all()
@@ -108,18 +112,19 @@ def create(request):
         else:
             # maybe redirect with another error
             print("submission CreateListing() NOT VALID")
+            return render(request, "auctions/create.html", {'create_form': submission})
 
 
     else: # "GET"
 
         # NOTES: funziona, sistemare design e cercare di mettere m2m to Category
         create_form = CreateListing()
-        context = {'create_form': create_form}
-        return render(request, "auctions/create.html", context)
+
+        return render(request, "auctions/create.html", {'create_form': create_form})
 
 # ============= item page =============
 
-def item_page(request, id):
+def item_page(request, id, bid_error=None):
     try:
         # ottieni l'id della pagina richiesta per caricare i dati
         item = Listing.objects.get(id=id)
@@ -132,7 +137,7 @@ def item_page(request, id):
         except:
             print("error in usr.is_watching()")
 
-        context = {'item':item, 'is_watching': is_watching, 'bid_form': bid_form,'comment_form': comment_form}
+        context = {'item':item, 'is_watching': is_watching, 'bid_form': bid_form,'comment_form': comment_form, 'bid_error': bid_error}
 
         return render(request, "auctions/item.html", context=context)
 
@@ -179,9 +184,7 @@ def watchlist(request):
 # WHY DEFAULT NONE???
 def watch_toggle(request, li_id=None): # DONE
     if request.method =="POST":
-        print("QUAA QUAA QUAA")
-        print(li_id)
-        print("QUAA QUAA QUAA")
+
         user = request.user
         # if follow, creates entry in database
         if request.POST['watch_toggle'] == "follow":
@@ -216,8 +219,10 @@ def bid(request, li_id):
             curret_price = listing.current_bid()
 
             if bid <= curret_price:
-                # TODO
-                error = "Your bid must be higher"
+                # error = messages.add_message(request, messages.INFO, "Your bid can't be lower than the current price")
+                # return item_page(request, li_id, error=error)
+                messages.add_message(request, messages.ERROR, "Your Bid can't be lower than the current price!")
+
             if bid > curret_price:
                 place_bid = Bids(listing=listing, user=request.user, bid=bid)
                 place_bid.save()

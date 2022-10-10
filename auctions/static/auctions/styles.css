@@ -7,4 +7,32 @@ body {
     background-color: rgba(0, 128, 128, 0.233);
 }
 
-.test-msg
+li.nav-item {
+    list-style: none;
+    color:red;
+}
+.user-section{
+    display: flex;
+    flex-direction: column;
+    padding:2px;
+    align-items: center;
+    justify-content: center;
+}
+
+#current-user{
+    line-height: 12px;
+    display: flex;
+    align-self: center;
+    justify-content: center;
+
+}
+
+ul.errorlist, ul.messages {
+    background-color: rgba(255, 0, 0, 0.179);
+    font-size: 20px;
+    list-style: none;
+    color: rgb(104, 3, 3);
+    border-radius: 8px;
+    max-width: 50vh;
+
+}
