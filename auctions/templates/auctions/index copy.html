@@ -1,0 +1,50 @@
+{% extends "auctions/layout.html" %}
+{% block title %}Auctionly{% endblock %}
+
+{% block body %}
+<h2>Active Listings</h2>
+
+
+    <!-- if items, display cards -->
+<div class="col d-flex">
+{% for item in items_database%}
+        {%if item.active%}
+        
+
+        <div class="card" style="width: 12rem;">
+            <img src="{{item.image}}" class="card-img-top" alt="#TODO placeholder" height="80px">
+            <div class="card-body">
+                <h5 class="card-title"> <a href="{% url 'item' item.id %}">{{item.title}}</a></h5>
+                <p class="card-text">{{item.descr_snippet}}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Price = {{item.current_bid}}</li>
+                <!-- <li class="list-group-item">Current Bid = {{bid}}</li> -->
+
+                <li class="list-group-item">O.P. {{item.owner}}</li>
+                <li class="list-group-item">Categ: {{item.category}}</li>
+            </ul>
+            <div class="card-body">
+                <!-- place bid button link to item page -->
+                <a href="{% url 'item' item.id %}" class="card-link">Place Bid</a>
+
+                <!-- add to watchlist form -->
+                <form action="{%url 'watch_toggle' item.id %}" method="post">
+                    {%csrf_token%}
+                    <!-- &lt; è escapechar per < (remember &lesserthan;) -->
+                    <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-danger" , value="follow">&lt;3</button>
+
+                </form>
+            </div>
+        </div>
+        {%endif%}
+
+
+        <!-- if no items -->
+        {% empty %}
+        <h2>There are no active listings at the moment</h2>
+        {% endfor %}
+    </div>
+
+
+    {% endblock %}

@@ -1,13 +1,13 @@
 {% extends "auctions/layout.html" %}
 
-{% block title %}Watchlist{% endblock %}
+{% block title %}Your auctions{% endblock %}
 
 {% block body %}
-<h2>Watching:</h2>
+<h2>Your auctions:</h2>
 
 <div class="row">
-{% for item in watchlist%}
-{%include 'auctions/card2.html' %}
+{% for item in user_posted%}
+    {%include 'auctions/card2.html' %}
 
     {% empty %}
     <h2>There are no favourite listings at the moment</h2>

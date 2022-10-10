@@ -30,8 +30,9 @@ class AddComment(ModelForm):
         fields = ('text',)
 
 # ============= index page =============
-def blank(request):
-    return render(request, 'auctions/blank.html')
+def test(request):
+    l1 = Listing.objects.get(id=1)
+    return render(request, 'auctions/card.html', {'item': l1})
 # ============= index page =============
 def index(request):
     items_database = Listing.objects.all()
@@ -177,6 +178,18 @@ def watchlist(request):
         print("error in user_watchlist() function")
 
     return render(request, "auctions/watchpage.html",{"watchlist":user_watchlist})
+# ============= user posted =============
+
+def my_auctions(request):
+    #display the user watched items
+    # can be shortened without try/except
+    try:
+        # sometimes only works with request.user.id
+        user_posted = get_my_auctions(request.user)
+    except:
+        print("error in user_posted() function")
+
+    return render(request, "auctions/my_auctions.html",{"user_posted":user_posted})
 
 # ============= watch toggle function =============
 
@@ -278,6 +291,10 @@ def get_user_watchlist(us_id):
         user_watched = Listing.objects.filter(watchers__user_id = us_id)
 
         return user_watched #return QuerySet
+
+def get_my_auctions(us_id):
+    user_posted = Listing.objects.filter(owner=us_id)
+    return user_posted
 
 # notes from watch_toggle
 """ mettere server-side checking in caso di trickery su HTML

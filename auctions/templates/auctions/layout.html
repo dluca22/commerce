@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    <title>{% block title %}Auctions{% endblock %}</title>
+    <title>{% block title %}Auctionly{% endblock %}</title>
     <!-- google font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Dancing Script">
 
@@ -36,7 +36,7 @@
                 {% if user.is_authenticated %}
 
                 <div class="row align-items-baseline">
-                    <span class="welcome">Hello: <b>{{ user.username }}</b></span>
+                    <span class="welcome">Hello: <b>{{ user.username | capfirst }}</b></span>
                     <a class="nav-link dropdown-toggle dropdown-menu-right" href="#" id="navbarDarkDropdownMenuLink"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="{%static 'auctions/images/user.png'%}" alt="profile image" width="50px" height="50px">
@@ -81,20 +81,21 @@
     <!-- end navbar -->
 
     <!-- voglio mettere qua il logo -->
-    <div class="row d-flex justify-content-center pe-5">
-        <div class="logo me-5"><img src="{%static 'auctions/images/auctionly_logo.svg' %}" alt="Auctionly" width="300px"
-                height="160"></div>
+    <div class="row d-flex justify-content-start ">
+        <div class="logo pt-1 mb-3 offset-2"><img src="{%static 'auctions/images/auctionly_logo.svg' %}" alt="Auctionly"
+                width="300px" height="160"></div>
     </div>
 
     <!-- sezione main -->
-    <section class="container main">
+    <section class="container-fluid main ">
         <!-- colonna sinistra -->
 
         <!-- colonna destra -->
 
-        <div class="row bg-danger">
+        <div class="row ">
 
-            <div class="sidebar col-lg-2 col-md-3 col-sm-3 px-4">
+            <div id="sidebar" class="sidebar d-none d-md-block col-lg-2 col-md-3 px-4 pt-4">
+
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
                 </li>
@@ -102,11 +103,12 @@
                     <a class="nav-link" href="{% url 'categories' %}">Category</a>
                 </li>
                 {% if user.is_authenticated %}
+                <hr>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'create' %}">Create new listing</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'create' %}">My listings</a>
+                    <a class="nav-link" href="{% url 'my_auctions' %}">My listings</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'watchlist' %}">Watchlist </a>
@@ -114,9 +116,13 @@
                 {% endif %}
             </div>
 
-            <div class="col-auto mx-auto">
-                {% block body %}
-                {% endblock %}
+            <div class="col col-sm-9">
+
+
+                    {% block body %}
+                    {% endblock %}
+
+
             </div>
         </div>
 

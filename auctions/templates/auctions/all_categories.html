@@ -1,5 +1,16 @@
 {% extends "auctions/layout.html"%}
 
+{% block title %}
+
+{% if display_all %}
+Categories
+{%elif show_in_this_category %}
+{{category.name}}
+{%endif%}
+
+{% endblock %}
+
+
 {% block body %}
 <!-- if no error was passed -->
 {% if not error %}
@@ -8,6 +19,8 @@
 
 <!-- IF page called via "display" context, shows list of cateogries with links-->
     {% if display_all %}
+
+
         <!-- FORLOOP to list all categories -->
         {% for category in all_categories %}
         <a href="{%url 'category' category.name%}">{{category.name}}</a>
