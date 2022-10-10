@@ -11,12 +11,20 @@ li.nav-item {
     list-style: none;
     color:red;
 }
-.user-section{
-    display: flex;
-    flex-direction: column;
+
+/* new style */
+/*  */
+#user-section{
+   
+
     padding:2px;
     align-items: center;
     justify-content: center;
+}
+
+.welcome{
+    font-family: "Dancing Script", serif;
+    font-size: 30px;
 }
 
 #current-user{
@@ -34,5 +42,12 @@ ul.errorlist, ul.messages {
     color: rgb(104, 3, 3);
     border-radius: 8px;
     max-width: 50vh;
+}
+
+#user-dropdown{
+    border: none !important;
+    text-align: center;
+    padding-top: 1px;
+    margin-top: 1px;
 
 }
