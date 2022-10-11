@@ -131,9 +131,13 @@ def item_page(request, id, bid_error=None):
         item = Listing.objects.get(id=id)
         bid_form= PlaceBid()
         comment_form = AddComment()
+        usr = request.user
+        if not usr.is_authenticated:
+            context = {'item':item, 'bid_form': bid_form,'comment_form': comment_form, 'bid_error': bid_error}
+
+            return render(request, "auctions/item.html", context=context)
 
         try:
-            usr = request.user
             is_watching = usr.is_watching(item.id)
         except:
             print("error in usr.is_watching()")
@@ -143,7 +147,7 @@ def item_page(request, id, bid_error=None):
         return render(request, "auctions/item.html", context=context)
 
     except: # if no page
-        error = "this fucking thing"
+        error = "This item wasn't added yet"
 
         return render(request, "auctions/item.html", {'error':error})
 

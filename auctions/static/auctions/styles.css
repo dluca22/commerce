@@ -1,11 +1,7 @@
 body {
     padding: 10px;
     margin: 25px;
-}
-
-.test-text{
-    color:rgb(155, 11, 11);
-    background-color: rgba(0, 128, 128, 0.233);
+    font-family: Montserrat, sans-serif;
 }
 
 li.nav-item {
@@ -35,15 +31,24 @@ li.nav-item {
 /* sidebar and its child */
 #sidebar :first-child > a ,
 #sidebar :nth-child(2) > a{
-    color: red;
-    font-size: 22px;
-    }
+    background-image: linear-gradient(90deg, #ce7c089b, rgba(238, 255, 0, 0));
+    border-radius: 2px 11px 11px 11px ;
+    margin-top: 5px;
+    font-size: 18px;
+    color:rgba(0, 0, 0, 0.756);
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
 #sidebar :nth-child(4) > a ,
 #sidebar :nth-child(5) > a ,
 #sidebar :nth-child(6) > a {
-    color:green;
-    font-size: 22px;
+    background-image: linear-gradient(90deg, rgb(0, 255, 106, 0.8), rgba(238, 255, 0, 0));
+    border-radius: 2px 11px 11px 11px ;
+    margin-top: 5px;
+    font-size: 18px;
+    color:rgba(0, 0, 0, 0.756);
+
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 ul.errorlist, .messages{
@@ -72,29 +77,60 @@ ul.errorlist, .messages{
     border-radius: 10px 10px 10px 2px;
     display: flex;
 }
+/* next 2 remove the link styling (color and underline) */
 .card-body > a:link{
     text-decoration: inherit;
     color: inherit;
-
 }
 .card-body > a:visited{
-
     text-decoration: inherit;
     color: inherit;
-
 }
-
 
 .card-body{
     height: 15rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-around;
+    padding:5px;
 }
+
+/* "description" flag and snippet body */
+.card-body :nth-child(2),
+.card-body :nth-child(3) {
+    align-self: flex-start;
+}
+/* "description flag" closer to snippet + underline */
+.card-body :nth-child(2){
+    text-decoration: underline dotted;
+    margin-bottom: -10px;
+}
+
+.card-title{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    width: 100px;
+    font-family: Montserrat, sans-serif;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+.card-price{
+    font-size: 40px;
+    font-weight: 600;
+    color: rgb(200, 53, 0);
+}
+.currency{
+    font-size: 25px;
+    color: rgb(140, 38, 0);
+}
+
 .card-footer{
     background-color: rgb(173, 223, 161);
 }
-.MY-card-footer{
+.OWNER-card-footer{
     background-color: rgb(161, 208, 223);
 }
 .inactive-card-footer{
@@ -105,18 +141,20 @@ ul.errorlist, .messages{
 .owner-tag, .poster-tag{
     background-color: rgb(0, 100, 251);
     border-radius: 10px;
+    color: rgb(238, 238, 238);
     display: inline-block;
     margin: 2px;
     padding: 1px;
     width: fit-content;
     position:absolute;
-    color: rgb(238, 238, 238);
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
 .poster-tag{
     background-color: rgb(3, 125, 46);
-
 }
+/* heart icon */
+
+
 /* a container around card image to claim half of the card space in case of shorter images */
 /* centers the image */
 .card-image-container{
@@ -130,5 +168,67 @@ ul.errorlist, .messages{
 
 
     overflow: hidden !important;
+}
 
+/* item page */
+#watchlist-button > img{
+    height:30px;
+    width:35px;
+}
+.like-toggle{
+    position: absolute;
+    right: 20px;
+}
+.descriptors{
+    font-weight: bold;
+    color: orangered;
+
+}
+
+/* bid input  style */
+#id_bid{
+    border-radius: 10px;
+    border-style: solid;
+    border-color: rgb(3, 196, 3);
+}
+#id_text{
+    border-radius: 10px;
+    border-style: solid;
+    border-color: blue;
+}
+.your-username{
+    color: rgb(0, 100, 251);
+    font-weight: bold;
+
+}
+.other-username{
+    background-color: rgb(3, 125, 46);
+    font-weight: bold;
+}
+.form-field > *{
+    border-radius: 7px;
+    border-style: solid !important;
+    border-color: rgb(19, 197, 70);
+}
+
+.category-box{
+    font-family: "Dancing Script", serif;
+    font-weight: bold;
+    font-size: 44px;
+    border: solid 3px #6C757D;
+    border-radius: 35px 35px 35px 0px;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+}
+.category-box> a:link{
+    text-decoration: inherit;
+    color: #6C757D;
+}
+.category-box> a:visited{
+    text-decoration: inherit;
+    color: #6C757D;
 }

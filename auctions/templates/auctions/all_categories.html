@@ -20,10 +20,13 @@ Categories
 <!-- IF page called via "display" context, shows list of cateogries with links-->
     {% if display_all %}
 
+        <div class="container-fluid d-flex flex-wrap">
 
         <!-- FORLOOP to list all categories -->
         {% for category in all_categories %}
-        <a href="{%url 'category' category.name%}">{{category.name}}</a>
+        <div class="category-box">
+            <a href="{%url 'category' category.name%}">{{category.name | capfirst}}</a>
+        </div>
 
         <!-- EMPTY FORLOOP to list all categories -->
         {% empty %}
@@ -32,6 +35,9 @@ Categories
         <!-- ENDOFR to list all categories -->
         {% endfor %}
 
+
+
+        </div>
         <!-- ELIF called via "selected" context, shows all listing belonging to the selected category -->
     {%elif show_in_this_category %}
 
@@ -42,34 +48,10 @@ Categories
     <!-- FOR every item belonging in that category -->
             {% for item in items_in_cat %}
 
-            <div class="card" style="width: 12rem;">
-                <img src="{{item.image}}" class="card-img-top" alt="#TODO placeholder" height="80px">
-                <div class="card-body">
-                    <h5 class="card-title"> <a href="{% url 'item' item.id %}">{{item.title}}</a></h5>
-                    <p class="card-text">{{item.descr_snippet}}</p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Price = {{item.current_bid}}</li>
-                    <!-- <li class="list-group-item">Current Bid = {{bid}}</li> -->
-
-                    <li class="list-group-item">O.P. {{item.owner}}</li>
-                    <li class="list-group-item">Categ: {{item.category}}</li>
-                </ul>
-                <div class="card-body">
-                    <!-- place bid button link to item page -->
-                    <a href="{% url 'item' item.id %}" class="card-link">Place Bid</a>
-
-                    <!-- add to watchlist form -->
-                    <form action="{%url 'watch_toggle' item.id %}" method="post">
-                        {%csrf_token%}
-                        <!-- &lt; è escapechar per < (remember &lesserthan;) -->
-                        <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-danger" , value="follow">&lt;3</button>
-
-                    </form>
-                </div>
-            </div>
+            {%include 'auctions/card.html'%}
             {%empty%}
-            <h2>There is no active listing in this category</h2>
+
+            <div class="alert alert-warning" role="alert"><h2>There are no active listing in this category</h2></div>
             <!-- ENDFOR Items to show -->
             {% endfor %}
 
@@ -81,7 +63,9 @@ Categories
     {%endif%}
 <!-- ELSE an error has been passed -->
 {%else%}
-        <h2><u>{{error}}</u> category doesn't exist</h2>
+
+   <div class="alert alert-info" role="alert"><h2><u>{{error}}</u> category doesn't exist</h2></div>
+
 <!-- ENDIF error catching -->
 {%endif%}
 {%endblock%}

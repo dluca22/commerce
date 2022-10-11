@@ -1,35 +1,35 @@
-<div class="card">
+{%load static %}
+<div class="card p-0 align-self-center overflow-hidden">
+  {%if item.owner == request.user%}
+  <span class="owner-tag">{{item.owner|capfirst}}</span>
+  {%else%}
+  <span class="poster-tag">{{item.owner|capfirst}}</span>
+  {%endif%}
 
-    <span class="owner-tag">{{item.owner}}</span>
+  <!-- if authenticated, see follow icon on top right -->
+   <div class="card-image-container">
+    <a href="{% url 'item' item.id %}">
+      <img src="{{item.image}}" class="card-img-top" alt="{{item.title}}">
+    </a>
+  </div>
+  <div class="card-body">
+    <a href="{% url 'item' item.id %}">
+      <h3 class="card-title">{{item.title}}</h3>
+    </a>
+    <small>Description:</small>
+    <p class="card-text">{{item.descr_snippet}}.</p>
+    <p class="card-text card-price">{{item.current_bid}} <span class="currency">$</span></p>
+  </div>
+  {%if item.active == False%}
+  <div class="inactive-card-footer p-1">
 
-    <div class="card-body p-0 align-self-center">
-        <a href="{% url 'item' item.id %}">
-            <img src="{{item.image}}" class="card-img-top my-auto" alt="{{item.title}}"></a>
-        <div class="row container-fluid justify-content-center">
-            <a href="{% url 'item' item.id %}">
-                <h5 class="card-title">{{item.title}}</h5>
-            </a>
-        </div>
-        <p class="card-text">{{item.descr_snippet}}</p>
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Price = {{item.current_bid}}</li>
-        <!-- <li class="list-group-item">Current Bid = {{bid}}</li> -->
+    {%elif item.owner == request.user%}
+  <div class="OWNER-card-footer p-1">
 
-        <li class="list-group-item">Categ: {{item.category}}</li>
-    </ul>
-    <div class="card-body">
-        <!-- place bid button link to item page -->
-        <a href="{% url 'item' item.id %}" class="card-link">Place Bid</a>
+    {%else%}
+  <div class="card-footer p-1">
+  {%endif%}
+    <small class="text-muted"><u>Posted:</u> {{item.date| date:"l M d y"}}</small>
+  </div>
 
-        <!-- add to watchlist form -->
-        <form action="{%url 'watch_toggle' item.id %}" method="post">
-            {%csrf_token%}
-            <!-- &lt; è escapechar per < (remember &lesserthan;) -->
-            <button type="submit" name="watch_toggle" id="watchlist-button" class="btn btn-danger" ,
-                value="follow">&lt;3</button>
-
-        </form>
-    </div>
 </div>
-
