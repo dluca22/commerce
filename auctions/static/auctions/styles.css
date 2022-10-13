@@ -116,6 +116,7 @@ ul.errorlist, .messages{
     font-family: Montserrat, sans-serif;
     font-weight: bold;
     margin-bottom: 0px;
+    color: rgb(200, 1, 1);
 }
 .card-price{
     font-size: 40px;
@@ -179,6 +180,11 @@ ul.errorlist, .messages{
     position: absolute;
     right: 20px;
 }
+img[alt="item-image"]{
+    max-width: 30vh;
+    max-height: 30vh;
+
+}
 .descriptors{
     font-weight: bold;
     color: orangered;
@@ -189,7 +195,7 @@ ul.errorlist, .messages{
 #id_bid{
     border-radius: 10px;
     border-style: solid;
-    border-color: rgb(3, 196, 3);
+    border-color: #FFC107;
 }
 #id_text{
     border-radius: 10px;
@@ -202,19 +208,18 @@ ul.errorlist, .messages{
 
 }
 .other-username{
-    background-color: rgb(3, 125, 46);
+    color: rgb(3, 125, 46);
     font-weight: bold;
 }
 .form-field > *{
     border-radius: 7px;
     border-style: solid !important;
-    border-color: rgb(19, 197, 70);
+    border-color: rgb(197, 164, 19);
 }
 
 .category-box{
     font-family: "Dancing Script", serif;
     font-weight: bold;
-    font-size: 44px;
     border: solid 3px #6C757D;
     border-radius: 35px 35px 35px 0px;
     width: 150px;
@@ -223,10 +228,15 @@ ul.errorlist, .messages{
     align-items: center;
     justify-content: center;
     margin: 10px;
+    font-size: fit-width;
+
 }
+
 .category-box> a:link{
     text-decoration: inherit;
     color: #6C757D;
+    font-size: 40px;
+
 }
 .category-box> a:visited{
     text-decoration: inherit;

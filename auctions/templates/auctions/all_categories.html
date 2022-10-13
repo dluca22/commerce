@@ -21,7 +21,11 @@ Categories
     {% if display_all %}
 
         <div class="container-fluid d-flex flex-wrap">
-
+            <a href="{%url 'category' 'No-cat'%}">
+            <div class="category-box">
+                <a href="{%url 'category' 'No-cat'%}">No-categ</a>
+            </div>
+            </a>
         <!-- FORLOOP to list all categories -->
         {% for category in all_categories %}
         <div class="category-box">
@@ -42,7 +46,7 @@ Categories
     {%elif show_in_this_category %}
 
 
-
+    <div id="card-grid" class="container d-flex flex-wrap">
     <!-- IF there are active items IN THIS CATEGORY -->
 
     <!-- FOR every item belonging in that category -->
@@ -59,7 +63,7 @@ Categories
 
 
     <!-- ENDIF called via "display"/"selected" context -->
-
+    </div>
     {%endif%}
 <!-- ELSE an error has been passed -->
 {%else%}

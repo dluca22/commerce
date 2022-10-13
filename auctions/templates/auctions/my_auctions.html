@@ -5,7 +5,7 @@
 {% block body %}
 <h2>Your auctions:</h2>
 
-<div class="row">
+<div id="card-grid" class="container d-flex flex-wrap">
 {% for item in user_posted%}
     {%include 'auctions/card.html' %}
 

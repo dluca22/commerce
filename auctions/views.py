@@ -73,6 +73,11 @@ def register(request):
         # Ensure password matches confirmation
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
+        if len(password) < 3:
+            return render(request, "auctions/register.html", {
+                "message": "Password must be at least 3 char"
+            })
+
         if password != confirmation:
             return render(request, "auctions/register.html", {
                 "message": "Passwords must match."
@@ -105,6 +110,9 @@ def create(request):
         # if valid, add owner to the model, then save
         if submission.is_valid():
             submission.instance.owner = request.user
+            submission.instance.active = True
+            if not submission.instance.image:
+                submission.instance.image = "https://static.vecteezy.com/system/resources/thumbnails/006/899/230/small/mystery-random-loot-box-from-game-icon-vector.jpg"
             submission.save()
 
             listing_id = submission.instance.id # can only get 'id' AFTER save(), else: None
@@ -159,7 +167,10 @@ def categories(request):
 
 # ============= selected categories page =============
 def in_category(request, categ_name):
+    if categ_name == 'No-cat':
+        none_cat = Listing.objects.filter(category = None)
 
+        return render(request, "auctions/all_categories.html", {'category':'no-cat', 'show_in_this_category': True, 'items_in_cat': none_cat})
     try:
         category = Category.objects.get(name = categ_name)
         items_in_cat = category.active_in_category

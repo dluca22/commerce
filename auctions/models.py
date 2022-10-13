@@ -1,3 +1,4 @@
+from email.policy import default
 from tkinter import CASCADE
 from unittest.util import _MAX_LENGTH
 from django.contrib.auth.models import AbstractUser
@@ -38,7 +39,7 @@ class Listing(models.Model):
     id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=64)
     start_price = models.FloatField()
-    image = models.URLField(null=True, blank=True, default="https://static.vecteezy.com/system/resources/thumbnails/006/899/230/small/mystery-random-loot-box-from-game-icon-vector.jpg")
+    image = models.URLField(null=True, blank=True)
     description = models.TextField(max_length=500, null=True) #remove NULL?
     date = models.DateTimeField(auto_now=True) # editable=False
     active = models.BooleanField(default=True)
@@ -69,7 +70,7 @@ class Listing(models.Model):
     # returns a snippet of the description
     @property
     def descr_snippet(self):
-        return f"{self.description[:15]} ..."
+        return f"{self.description[:25]} ..."
     # returns all comments objects for this listing
     @property
     def comments(self):
