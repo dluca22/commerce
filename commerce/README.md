@@ -25,6 +25,9 @@ On the other hand if the user won the auction of an item from another user, and 
 An authenticated user can also create a new auction, where he will be prompted to input a title, a starting price for the item, a link to an image, the description and the category it should be listed under.
 If no image URL was provided, it would default to a preset one just as a placeholder, same applies for the category that if none were selected, it would fall under the "No-category view"
 
+Of course this is implemented in basic html, django template and python functions, without any async javascript, so every toggle, bid and action will result in a page refresh
+
+
 Lastly, *My Listings* is a view that displays all the auction the current user has posted, that will also display all the auction we set as closed (they will visually appear with a grey accent), so that the owner can still be able to open up the listing and see the winner of the auction, without having to manually enter the id in the URL.
 
 <hr>

@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.forms import ModelForm, modelformset_factory
+from django.forms import ModelForm
 from .models import *
 from django.contrib import messages
 

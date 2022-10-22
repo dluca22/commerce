@@ -1,5 +1,5 @@
 {
-    "workbench.colorTheme": "Default Dark+",
+    "workbench.colorTheme": "Sublime Material Theme - Dark",
     "workbench.colorCustomizations": {
     "[Tokyo Night Storm]": {
         "activityBar.foreground": "#9422d6",
@@ -7,29 +7,5 @@
     }
         },
 
-    "editor.tokenColorCustomizations": {
-        "[Tokyo Night Storm]": {
-            "keywords": "#daff1f",
-            "numbers": "#ea00ff",
-            "variables": "#FF0000"
-        },
-        "comments": "",
-        "textMateRules": []
-    },
-    "editor.semanticTokenColorCustomizations": {
-         "[Tokyo Night Storm]": {
-            "enabled": true,
-            "rules": {
-                "variable": "#ff0000",
-                "property": "#ff0000",
-                "field": "#ff0000",
-                "selfParameter": "#ff0000",
-                "local":"#ff0000",
-                "number": "#ff0000",
-                "enumMember": "#ff0000",
-                "string": "#ff0000",
-            }
-         }
-    },
     "editor.guides.indentation": true,
 }
