@@ -1,2 +1,3 @@
 venv/
 superuser_credential.txt
+.sqlite3
