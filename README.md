@@ -2,15 +2,15 @@
 
 ## Auctionly
 
-This is my submission for problemset2 Commerce for cs50web
+*This is my submission for problemset2 Commerce for cs50web*
 
-This is a django web app about an ecommerce auction website.
+#### This is a django web app about an ecommerce auction website.
 
 The website handles visits between anonymous users and registered ones.
 An anonymous user can browse all the listings in the website and the category section;
 he can see all the active listing, browse the content, the image, description, owner, starting price and current price, but cannot either place a bid, leave a comment or add the item to his watchlist.
 
-If an user logs in the interface changes and now the user can visually differentiate between the auctions he posted that will be highlighted in blue, from the auctions other users posted, that will be highlited in green.
+If an user logs in the interface changes and now he user can visually differentiate between the auctions he posted that will be highlighted in blue, from the auctions other users posted, that will be highlited in green.
 
 Every auction in the main view are displayed as a card containing the name of the owner of the listing, the image, the title, the current price and a snippet of the description that is actually a slice from the original description taken from the Listing model.
 
@@ -31,7 +31,7 @@ Of course this is implemented in basic html, django template and python function
 Lastly, *My Listings* is a view that displays all the auction the current user has posted, that will also display all the auction we set as closed (they will visually appear with a grey accent), so that the owner can still be able to open up the listing and see the winner of the auction, without having to manually enter the id in the URL.
 
 <hr>
-The best feature I found so useful to implement from django was the ability to create an html template for an auction card, and the ability to implement the same template in every different view (Homepage, Category, My Listings and Watchlist) that just displays the same base template that will be handled differently by the logic of each view.
+The best feature I found so useful to implement from django was the ability to create an html template for an auction card, and the ability to implement the same template in every different view (Homepage, Category, My Listings and Watchlist) that just displays the same base template that will be handled differently by the logic of each view, keeping the same level of integrity, security and user interface between each view
 
 #### -- Conclusion --
 This was by far the most interesting project I've done until now, it was my first experience using Django, and while the learning curve wasn't as easy as the one for Flask, the tools at our disposal are so many and so powerful that in the end adding or tweaking functinalities ad feature was actually a lot faster and easier after a bit of research.
